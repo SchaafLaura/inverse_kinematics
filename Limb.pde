@@ -91,10 +91,12 @@ class Limb {
   }
 
   void Display() {
-    fill(255);
-    stroke(255);
+    noFill();
+    colorMode(HSB, 255, 255, 255, 255);
+    stroke(frameCount * 0.1 % 255, 255, 255);
+    strokeWeight(0.01);
     for (int i = 0; i < p.length; i++) {
-      circle(p[i].x, p[i].y, 10);
+      circle(p[i].x, p[i].y, 3);
       if (i == 0) continue;
       line(p[i].x, p[i].y, p[i-1].x, p[i-1].y);
     }
