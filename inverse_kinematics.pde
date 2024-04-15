@@ -6,10 +6,6 @@ void setup() {
   size(1000, 1000);
   background(0);
 
-  stroke(255, 0, 0);
-  fill(255, 0, 0);
-  circle(width/2, height/2, 5);
-
   var jointLengths = new float[]{200, 200};
   myLimb = new Limb(jointLengths);
   
@@ -33,8 +29,8 @@ void draw() {
   }
 
   float dist = PVector.sub(newTarget, myLimb.p[0]).mag();
-  if (myLimb.p[0].x > width/2.15 && dist > myLimb.L && !limbSet) {
-    myLimb.SetTarget(newTarget, 15);
+  if (myLimb.p[0].x > width/3 && dist > myLimb.L && !limbSet) {
+    myLimb.SetTarget(newTarget, 20);
     limbSet = true;
   }
   myLimb.Move();
