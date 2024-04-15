@@ -116,8 +116,6 @@ class Limb {
     }
   }
 
-
-
   void Translate(PVector x) {
     for (var pos : p)
       pos.add(x);
@@ -127,7 +125,7 @@ class Limb {
     noFill();
     colorMode(HSB, 255, 255, 255, 255);
     stroke(frameCount * 0.1 % 255, 255, 255);
-    strokeWeight(30);
+    strokeWeight(10);
     for (int i = 0; i < p.length; i++) {
       circle(p[i].x, p[i].y, 3);
       if (i == 0) continue;
