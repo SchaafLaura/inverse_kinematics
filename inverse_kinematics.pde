@@ -8,7 +8,7 @@ void setup() {
   fill(255, 0, 0);
   circle(width/2, height/2, 5);
 
-  var jointLengths = new float[]{200, 175};
+  var jointLengths = new float[]{200, 10 ,175};
   myLimb = new Limb(jointLengths);
   myLimb.Translate(new PVector(100, height/2));
   myLimb.SetTarget(new PVector(width/4, height/2 + myLimb.L - 40), 0);
