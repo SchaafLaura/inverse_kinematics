@@ -31,7 +31,7 @@ class Limb {
   // Forward And Backward Reaching Inverse Kinematics
   void FABRIK(PVector t) {
     float dist = PVector.sub(p[0], t).mag();
-
+    
     if (dist > L) {// unreachable target
       for (int i = 0; i < p.length - 1; i++) {
         float r = PVector.sub(t, p[i]).mag(); // distance between target and joint
@@ -49,7 +49,9 @@ class Limb {
       // check whether the distance between the end effector
       // and the target is greater than tolerance
       float diff = PVector.sub(p[p.length-1], t).mag();
+      int k = 0;
       while (diff > tol) {
+        k++;
         // STAGE 1: FORWARD REACHING
         p[p.length-1] = t;
         for (int i = p.length - 2; i >= 0; i--) {
@@ -79,7 +81,10 @@ class Limb {
         }
         // update dist between target and end effector
         diff = PVector.sub(p[p.length-1], t).mag();
+        if(k > 10000)
+          break;
       }
+      println(k);
     }
   }
 
@@ -94,7 +99,7 @@ class Limb {
     noFill();
     colorMode(HSB, 255, 255, 255, 255);
     stroke(frameCount * 0.1 % 255, 255, 255);
-    strokeWeight(0.01);
+    strokeWeight(3);
     for (int i = 0; i < p.length; i++) {
       circle(p[i].x, p[i].y, 3);
       if (i == 0) continue;
