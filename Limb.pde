@@ -1,5 +1,5 @@
 class Limb {
-  float tol = 1;
+  float tol = 0.1;
 
   // joint positions
   PVector[] p;
@@ -9,6 +9,13 @@ class Limb {
 
   // total limb-length
   float L = 0;
+
+  // target for the end-affector
+  PVector target = new PVector(0, 0);
+  PVector prevTarget = new PVector(0, 0);
+
+  int t = 0;
+  int t0 = 0;
 
   public Limb(float... d) {
     this.d = d;
@@ -28,10 +35,32 @@ class Limb {
     }
   }
 
+  void SetTarget(PVector newTarget, int transitionFrames) {
+    this.prevTarget = new PVector(this.target.x, this.target.y);
+    this.target = new PVector(newTarget.x, newTarget.y);
+    t = transitionFrames;
+    t0 = transitionFrames;
+  }
+
+  void Move() {
+    if (t == t0) {
+      FABRIK(prevTarget);
+      t--;
+    } else if (t <= 0) {
+      FABRIK(target);
+    } else {
+      float lerp = map(t, t0, 0, 0, 1);
+      PVector currTarget = PVector.lerp(prevTarget, target, lerp);
+      currTarget.y -= sin(lerp*PI) * 100;
+      FABRIK(currTarget);
+      t--;
+    }
+  }
+
   // Forward And Backward Reaching Inverse Kinematics
   void FABRIK(PVector t) {
     float dist = PVector.sub(p[0], t).mag();
-    
+
     if (dist > L) {// unreachable target
       for (int i = 0; i < p.length - 1; i++) {
         float r = PVector.sub(t, p[i]).mag(); // distance between target and joint
@@ -81,10 +110,9 @@ class Limb {
         }
         // update dist between target and end effector
         diff = PVector.sub(p[p.length-1], t).mag();
-        if(k > 10000)
+        if (k > 10000)
           break;
       }
-      println(k);
     }
   }
 
@@ -99,7 +127,7 @@ class Limb {
     noFill();
     colorMode(HSB, 255, 255, 255, 255);
     stroke(frameCount * 0.1 % 255, 255, 255);
-    strokeWeight(3);
+    strokeWeight(30);
     for (int i = 0; i < p.length; i++) {
       circle(p[i].x, p[i].y, 3);
       if (i == 0) continue;
